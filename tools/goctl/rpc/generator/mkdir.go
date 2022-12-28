@@ -91,7 +91,7 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, _ *conf.Config, c *ZRpcC
 			strings.ToLower(stringx.From(proto.Service[0].Name).ToCamel()))
 		if strings.EqualFold(proto.Service[0].Name, filepath.Base(proto.GoPackage)) {
 			callDir = filepath.Join(ctx.WorkDir,
-				strings.ToLower(stringx.From(proto.Service[0].Name+"_client").ToCamel()))
+				strings.ToLower(stringx.From(proto.Service[0].Name).ToCamel()))
 		}
 		inner[call] = Dir{
 			Filename: callDir,
