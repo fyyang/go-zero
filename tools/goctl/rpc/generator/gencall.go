@@ -80,10 +80,12 @@ func (g *Generator) genCallGroup(ctx DirContext, proto parser.Proto, cfg *conf.C
 
 		alias := collection.NewSet()
 		if !isCallPkgSameToPbPkg {
-			for _, item := range proto.Message {
-				msgName := getMessageName(*item.Message)
-				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(msgName),
-					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(msgName))))
+			for _, item := range service.RPC {
+				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(item.RequestType),
+					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(item.RequestType))))
+				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(item.ReturnsType),
+					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(item.ReturnsType))))
+
 			}
 		}
 
