@@ -17,7 +17,7 @@ func genUpdate(table Table, withCache, postgreSql bool) (
 	expressionValues := make([]string, 0)
 	pkg := "data."
 	if table.ContainsUniqueCacheKey {
-		pkg = "newData."
+		//pkg = "newData."
 	}
 	for _, field := range table.Fields {
 		camel := util.SafeString(field.Name.ToCamel())
@@ -61,7 +61,7 @@ func genUpdate(table Table, withCache, postgreSql bool) (
 		return "", "", err
 	}
 
-	output, err := util.With("update").Parse(text).Execute(
+	output, err := util.With("update").Parse(text).AddFunc("hasField", hasField(table)).Execute(
 		map[string]any{
 			"withCache":             withCache,
 			"containsIndexCache":    table.ContainsUniqueCacheKey,
@@ -94,7 +94,7 @@ func genUpdate(table Table, withCache, postgreSql bool) (
 		return "", "", err
 	}
 
-	updateMethodOutput, err := util.With("updateMethod").Parse(text).Execute(
+	updateMethodOutput, err := util.With("updateMethod").Parse(text).AddFunc("hasField", hasField(table)).Execute(
 		map[string]any{
 			"upperStartCamelObject": camelTableName,
 			"data":                  table,
