@@ -66,14 +66,16 @@ func (g *Generator) genCallGroup(ctx DirContext, proto parser.Proto, cfg *conf.C
 		serviceName := stringx.From(service.Name).ToCamel()
 		alias := collection.NewSet()
 		var hasSameNameBetweenMessageAndService bool
-		for _, item := range proto.Message {
-			msgName := getMessageName(*item.Message)
-			if serviceName == msgName {
-				hasSameNameBetweenMessageAndService = true
-			}
+		for _, item := range service.RPC {
+
+			//if serviceName == msgName {
+			//	hasSameNameBetweenMessageAndService = true
+			//}
 			if !isCallPkgSameToPbPkg {
-				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(msgName),
-					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(msgName))))
+				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(item.RequestType),
+					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(item.RequestType))))
+				alias.AddStr(fmt.Sprintf("%s = %s", parser.CamelCase(item.ReturnsType),
+					fmt.Sprintf("%s.%s", proto.PbPackage, parser.CamelCase(item.ReturnsType))))
 			}
 		}
 		if hasSameNameBetweenMessageAndService {
