@@ -85,8 +85,12 @@ func (t *DefaultTemplate) Execute(data any) (*bytes.Buffer, error) {
 	return buf, nil
 }
 
-// AddFunc add template func
-func (t *DefaultTemplate) AddFunc(funcName string, function interface{}) *DefaultTemplate {
+// AddFunc adds a template function. It returns the template instance for chaining.
+// If funcName is empty or function is nil, it returns the template without modification.
+func (t *DefaultTemplate) AddFunc(funcName string, function any) *DefaultTemplate {
+	if funcName == "" || function == nil {
+		return t
+	}
 	t.funcMap[funcName] = function
 	return t
 }
